@@ -1,0 +1,3 @@
+[submodule "tscript"]
+	path = tscript
+	url = https://github.com/tglas/tscript

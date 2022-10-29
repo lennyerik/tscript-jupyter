@@ -1,0 +1,9 @@
+{
+ "argv": [
+  "node",
+  "{{KERNEL_DIR}}/index.js",
+  "{connection_file}"
+ ],
+ "display_name": "TScript",
+ "language": "tscript"
+}

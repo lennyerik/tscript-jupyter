@@ -1,0 +1,49 @@
+diff --git a/src/lang/parser/index.ts b/src/lang/parser/index.ts
+index 3324c7a..0b179a9 100644
+--- a/src/lang/parser/index.ts
++++ b/src/lang/parser/index.ts
+@@ -13,8 +13,11 @@ import { defaultOptions, Options } from "../helpers/options";
+ export class Parser {
+ 	public static parse(
+ 		sourcecode,
+-		options: Options = defaultOptions
++		options: Options = defaultOptions,
++        initialState: any = {}
+ 	): { program: any; errors: Array<any> } {
++        let continueFromPreviousState = Object.entries(initialState).length !== 0;
++
+ 		// create the initial program structure
+ 		let program: any = {
+ 			petype: "global scope", // like a main function, but with more stuff
+@@ -29,6 +32,7 @@ export class Parser {
+ 			step: scopestep, // execute all commands within the scope
+ 			sim: simfalse, // simulate commands
+ 			options: options, // make the options available to the interpreter
++            ...initialState
+ 		};
+ 
+ 		// create the parser state
+@@ -229,14 +233,16 @@ export class Parser {
+ 		try {
+ 			// pass 1: build an abstract syntax tree
+ 
+-			// parse the language core
+-			parse1(core.source, core.impl);
++            if (!continueFromPreviousState) {
++                // parse the language core
++                parse1(core.source, core.impl);
+ 
+-			// parse the built-in libraries
+-			parse1(lib_math.source, lib_math.impl);
+-			parse1(lib_turtle.source, lib_turtle.impl);
+-			parse1(lib_canvas.source, lib_canvas.impl);
+-			parse1(lib_audio.source, lib_audio.impl);
++                // parse the built-in libraries
++                parse1(lib_math.source, lib_math.impl);
++                parse1(lib_turtle.source, lib_turtle.impl);
++                parse1(lib_canvas.source, lib_canvas.impl);
++                parse1(lib_audio.source, lib_audio.impl);
++            }
+ 
+ 			// parse the user's source code
+ 			program.where = state.get();
