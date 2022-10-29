@@ -1,0 +1,6 @@
+{
+    "extends": "./tscript/tsconfig.json",
+    "include": [
+        "tscript/src/lang/"
+    ]
+}
