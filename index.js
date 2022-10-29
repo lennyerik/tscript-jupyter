@@ -4,6 +4,7 @@ const uuid = require("uuid");
 const jmp = require("jmp-zeromq6");
 const { Interpreter } = require("./tscript/src/lang/interpreter/interpreter.js");
 const { Parser } = require("./tscript/src/lang/parser/index.js");
+const { defaultOptions } = require("./tscript/src/lang/helpers/options.js");
 const { createDefaultServices } = require("./tscript/src/lang/interpreter/defaultService.js");
 
 if (argv.length != 3) {
@@ -78,11 +79,12 @@ function shellControlMsgHandler(socket, msg) {
         case "execute_request":
             if (!msg.content.silent) busy(msg);
             if (msg.content.code.trim() !== "") {
-                const parsed = Parser.parse(msg.content.code, initialState=prev_program_vars);
+                const parsed = Parser.parse(msg.content.code, defaultOptions, prev_program_vars);
                 if (parsed.errors.length === 0) {
                     interpreter.program = parsed.program;
                     interpreter.options = parsed.program.options;
                     interpreter.reset();
+                    console.log(prev_variables);
                     interpreter.stack[0].variables = prev_variables;
 
                     interpreter.service.print = (to_print) => {
