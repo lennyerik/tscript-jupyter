@@ -2,5 +2,8 @@
     "extends": "./tscript/tsconfig.json",
     "include": [
         "tscript/src/lang/"
+    ],
+    "exclude": [
+        "tscript/src/lang/tests/"
     ]
 }
